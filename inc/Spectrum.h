@@ -2,11 +2,13 @@
 #define SPECTRUM_H
 
  /* Copyright(c) 2018, REGATA Experiment at JINR, All rights reserved. *
- * See cxx source for full Copyright notice                               */
+  * See cxx source for full Copyright notice                           */
+ 
+ 
  /*!
- * \brief Class for identification of peaks from genie2000 cnf files.
- *
- * \author <a href="mailto:bdrum@jinr.ru">Boris Rumyantsev</a>
+  * \brief Class for works with spectra arrays.
+  *
+  * \author <a href="mailto:bdrum@jinr.ru">Boris Rumyantsev</a>
  */
 
 class Spectrum {
