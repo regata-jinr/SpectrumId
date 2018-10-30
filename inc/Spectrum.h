@@ -11,13 +11,22 @@
   * \author <a href="mailto:bdrum@jinr.ru">Boris Rumyantsev</a>
  */
 
+ 
+ /*
+  gSystem->AddIncludePath("-Iinc/")
+  .L src/Spectrum.cxx+
+  auto sp = new Spectrum()
+  sp->Load("../peakdeco/peakdeco-84/data/check/7105423.txt")
+  */
+ 
+ 
 #include <Peak.h>
 #include <Background.h>
 #include <MetaData.h>
 
 #include <string>
 #include <fstream>
-#include <valarray>
+#include <vector>
 
  //TODO: add interface for load spectrum from DB
  //TODO: add try catch
@@ -27,13 +36,13 @@
 class Spectrum {
   // members:
   private:
-    std::string extArr[6] = {".CSV", ".csv", ".TXT", ".txt", ".CNF", ".cnf"};
     MetaData metaData;
-    const char defDelimiter = '\t';
-    std::valarray<int>* channelArr;
-    std::valarray<double>* energyArr;
-    std::valarray<int>* countsArr;
+    const char defDelimiter;
+    std::vector<int>* channelArr;
+    std::vector<double>* energyArr;
+    std::vector<int>* countsArr;
     int printLevel;
+    std::string extArr[6];
     
   //methods:
   private:
@@ -41,25 +50,25 @@ class Spectrum {
     void LoadAscii(const std::string FileName, bool readMetaData);
     void Load(const std::string FileName, bool readMetaData);
     // Spectrum* Load(const std::string FileName); - from DB
-    void ParseMetaDataCnf(const std::string&); // NOTE here perhaps should be not a string, but something like byte string
-    void ParseMetaDataAscii(const std::string&);
+    void ParseMetaDataCnf(const std::string); // NOTE here perhaps should be not a string, but something like byte string
+    void ParseMetaDataAscii(const std::string);
     void ParseValue(const std::string);
    public:
     Spectrum();
     Spectrum(const char delimiter);
-    Spectrum(const char* FileName, bool readMetaData=true) {Spectrum(); Load(std::string(FileName), readMetaData);};
+    Spectrum(const char* FileName, bool readMetaData=true) :defDelimiter('\t'), extArr{".CSV", ".csv", ".TXT", ".txt", ".CNF", ".cnf"}  {Spectrum(); Load(std::string(FileName), readMetaData);};
     void Load(const char* FileName, bool readMetaData=true) {return Load(std::string(FileName), readMetaData);};
     //void Save(Spectrum* s, const char* FileName); // NOTE why is it needed? It would be better if I can add opportunity to save some temporary states of spectrum;
     MetaData GetMetaData();
     int GetPeaksCount();
     Peak* GetPeaks();
     Background* GetBackground();
-    std::valarray<int>*    GetChannelArray() {return channelArr;};
-    std::valarray<double>* GetEnergyArray()  {return energyArr;};
-    std::valarray<int>*    GetCountsArray()  {return countsArr;};
-    void SetChannelArray(std::valarray<int>* channelArr)  {this->channelArr = channelArr;};
-    void SetEnergyArray(std::valarray<double>* energyArr) {this->energyArr = energyArr;};
-    void SetCountsArray(std::valarray<int>* countsArr)    {this->countsArr = countsArr;};
+    std::vector<int>*    GetChannelArray() {return channelArr;};
+    std::vector<double>* GetEnergyArray()  {return energyArr;};
+    std::vector<int>*    GetCountsArray()  {return countsArr;};
+    void SetChannelArray(std::vector<int>* channelArr)  {this->channelArr = channelArr;};
+    void SetEnergyArray(std::vector<double>* energyArr) {this->energyArr = energyArr;};
+    void SetCountsArray(std::vector<int>* countsArr)    {this->countsArr = countsArr;};
     void SetPrintLevel(int printLevel) {this->printLevel = printLevel;};
     int  GetPrintLevel() {return printLevel;};
     
