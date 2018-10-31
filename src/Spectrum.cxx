@@ -106,7 +106,8 @@ void Spectrum::LoadAscii(const std::string FileName, bool readMetaData) {
   if (readMetaData)
     while(std::getline(iFile, line) && line[0] == '#') Spectrum::ParseMetaDataAscii(line);
   iFile.tellg();
- // if (line.find(defDelimiter) == std::string::npos) {::Error("Spectrum::LoadAscii","Default delimiter %c not found in first non header line.", defDelimiter);return;}
+  // TODO: check delimiter!
+  // if (line.find(defDelimiter) == std::string::npos) {::Error("Spectrum::LoadAscii","Default delimiter %c not found in first non header line.", defDelimiter);return;}
   Spectrum::ParseValue(line);
   while(std::getline(iFile, line)) Spectrum::ParseValue(line);
   iFile.close();
@@ -115,6 +116,7 @@ void Spectrum::LoadAscii(const std::string FileName, bool readMetaData) {
 void Spectrum::ParseValue(const std::string line) {
   std::istringstream iss(line);
   std::string token;
+  //TODO: check that channel,energy and counts exists!
   std::getline(iss, token, defDelimiter); 
   channelArr->push_back(std::stoi(token));
   std::getline(iss, token, defDelimiter);
