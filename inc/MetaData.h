@@ -13,7 +13,6 @@
 
 #include <string>
 
-//NOTE struct looks nice, but if I'll be use map, I can use some delimeter for headers (e.g. ':') and lvalue could be key, rval could be value. It means this program allows to use user own metadata! 
 struct MetaData {
   std::string  sampleName;
   std::string  sampleId;
@@ -24,9 +23,11 @@ struct MetaData {
   double       realTimeS;
   double       liveTimeS;
   unsigned int totalCounts;
+  // genie 2000 markers 
   std::string  markerLeft;
   std::string  markerRight;
   unsigned int markerCounts;
+  // Energy coefficients
   double       A0;
   double       A1;
   double       A2;

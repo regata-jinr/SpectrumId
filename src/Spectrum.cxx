@@ -17,43 +17,74 @@
 #include "TError.h"
 #include "MetaData.h"
 
-//TODO: add destructor;
+//TODO: add destructor; USE ONLY SMART POINTERS
 //TODO: metaData.empty() is not defined;
 //TODO: Should we let to users specify delimiter?
 //NOTE: LoadCnf could be skip, because now we can focus on algorithms.
 
+/**
+* @brief ...
+* 
+*/
 Spectrum::Spectrum()
   :defDelimiter('\t'),
    extArr{".CSV", ".csv", ".TXT", ".txt", ".CNF", ".cnf"}
 {
-    //defDelimiter('\t');
-    channelArr   = new std::vector<int>();
-    channelArr->reserve(8192);
-    energyArr    = new std::vector<double>();
-    energyArr->reserve(8192);
-    countsArr    = new std::vector<int>();
-    countsArr->reserve(8192);
-    SetPrintLevel(0);
+  Spectrum::InitFields();
 }
 
+/**
+* @brief ...
+* 
+* @param delimiter p_delimiter:...
+*/
 Spectrum::Spectrum(const char delimiter) 
   :defDelimiter(delimiter),
    extArr{".CSV", ".csv", ".TXT", ".txt", ".CNF", ".cnf"}
 {
-    channelArr   = new std::vector<int>();
-    channelArr->reserve(8192);
-    energyArr    = new std::vector<double>();
-    energyArr->reserve(8192);
-    countsArr    = new std::vector<int>();
-    countsArr->reserve(8192);
-    SetPrintLevel(0);
+  Spectrum::InitFields();
 }
 
+/**
+* @brief ...
+* 
+* @param FileName p_FileName:...
+* @param readMetaData p_readMetaData:...
+*/
+Spectrum::Spectrum(const char* FileName, bool readMetaData)
+  :defDelimiter('\t'),
+   extArr{".CSV", ".csv", ".TXT", ".txt", ".CNF", ".cnf"} 
+{
+  Spectrum::InitFields();
+  Spectrum::Load(std::string(FileName), readMetaData);
+}
+
+/**
+* @brief ...
+* 
+*/
+void Spectrum::InitFields() {
+  channelArr.reserve(8192);
+  energyArr.reserve(8192);
+  countsArr.reserve(8192);
+  SetPrintLevel(0);
+}
+
+/**
+* @brief ...
+* 
+* @return MetaData
+*/
 MetaData Spectrum::GetMetaData() {
   //if (metaData.empty()) ::Warning("Spectrum::GetMetaData()", "metaData is empty!"); 
   return metaData;
 }
 
+/**
+* @brief ...
+* 
+* @param line p_line:...
+*/
 void Spectrum::ParseMetaDataCnf(const std::string line) {
   return;
   uint32_t idh=0;
@@ -69,9 +100,20 @@ void Spectrum::ParseMetaDataCnf(const std::string line) {
   
 }
 
+/**
+* @brief ...
+* 
+* @param line p_line:...
+*/
 void Spectrum::ParseMetaDataAscii(const std::string line) {
 }
 
+/**
+* @brief ...
+* 
+* @param FileName p_FileName:...
+* @param readMetaData p_readMetaData:...
+*/
 void Spectrum::Load(const std::string FileName, bool readMetaData) {
   const std::string ext = FileName.substr(FileName.find_last_of('.'));
   if (std::find(std::begin(extArr), std::end(extArr), ext) == std::end(extArr))
@@ -83,6 +125,12 @@ void Spectrum::Load(const std::string FileName, bool readMetaData) {
     return Spectrum::LoadAscii(FileName, readMetaData);
 }
 
+/**
+* @brief ...
+* 
+* @param FileName p_FileName:...
+* @param readMetaData p_readMetaData:...
+*/
 void Spectrum::LoadCnf(const std::string FileName, bool readMetaData) {
   ::Info("Spectrum::LoadCnf", "Function don't implement yet. Please, use cnf2txt.");
   return;
@@ -98,6 +146,13 @@ void Spectrum::LoadCnf(const std::string FileName, bool readMetaData) {
   iFile.close();
 }
 
+
+/**
+* @brief ...
+* 
+* @param FileName p_FileName:...
+* @param readMetaData p_readMetaData:...
+*/
 void Spectrum::LoadAscii(const std::string FileName, bool readMetaData) {
   std::ifstream iFile(FileName.c_str());
   std::string line="#";
@@ -113,15 +168,20 @@ void Spectrum::LoadAscii(const std::string FileName, bool readMetaData) {
   iFile.close();
 }
 
+/**
+* @brief ...
+* 
+* @param line p_line:...
+*/
 void Spectrum::ParseValue(const std::string line) {
   std::istringstream iss(line);
   std::string token;
   //TODO: check that channel,energy and counts exists!
+  //TODO: how can I change such construction to just iFile >> channel >> energy >> counts; ?
   std::getline(iss, token, defDelimiter); 
-  channelArr->push_back(std::stoi(token));
+  channelArr.push_back(std::stoi(token));
   std::getline(iss, token, defDelimiter);
-  energyArr->push_back(std::stod(token));
+  energyArr.push_back(std::stod(token));
   std::getline(iss, token, defDelimiter); 
-  countsArr->push_back(std::stoi(token));
+  countsArr.push_back(std::stoi(token));
 }
-

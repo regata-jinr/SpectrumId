@@ -5,7 +5,7 @@
  
  
  /*!
-  * \brief Class for works with background.
+  * \brief Struct with description of spectra background.
   *
   * \author <a href="mailto:bdrum@jinr.ru">Boris Rumyantsev</a>
  */
@@ -14,10 +14,7 @@
 #include <string>
 
  
-class Background {
-  private:
-
-  public:
+struct Background {
     
 };
 

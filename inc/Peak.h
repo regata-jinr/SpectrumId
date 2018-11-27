@@ -6,7 +6,7 @@
  
  
  /*!
-  * \brief Class for works with peak.
+  * \brief Struct with description of peak.
   *
   * \author <a href="mailto:bdrum@jinr.ru">Boris Rumyantsev</a>
  */
@@ -15,10 +15,7 @@
 #include <string>
 
  
-class Peak {
-  private:
-
-  public:
+struct Peak {
     
 };
 
