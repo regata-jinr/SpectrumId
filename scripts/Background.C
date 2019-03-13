@@ -53,7 +53,7 @@ void Parse2ColCSVGenie(const char* file, std::vector<double> &a, std::vector<dou
 }
 
 Double_t* SMNP(Double_t* arr, Int_t size) {
-  Double_t* sArr = arr;
+  auto sArr = new double[size];
   for (auto i=0;i<size;++i) sArr[i]=TMath::Log(TMath::Log(TMath::Sqrt(arr[i]+1)+1)+1);
   return sArr;
 }
@@ -119,37 +119,5 @@ void BackgroundEstimation() {
   legend->AddEntry(grPD,"alg2");  // peakDeco
   legend->AddEntry(grGenie,"genie");
   legend->Draw("same");
-  
-}
-
-void PeakSearch(){
-  
-  auto sp = new Spectrum("../peakdeco/peakdeco-84/data/check/7105423.txt");
-  auto tsp = new TSpectrum();
-  auto vic = sp->GetCountsArray();
-  auto vde = sp->GetEnergyArray();
-  std::vector<double> vde1(vde.begin()+500, vde.begin()+2000);
-  std::vector<double> vdc(vic.begin()+500, vic.begin()+2000);
-  Double_t* e = &vde1[0];
-  Double_t* c = SMNP(vdc.data(), vdc.size());
-  Double_t* destC = new Double_t[vdc.size()];
-  std::vector<Double_t> vi (vdc.size(),1.8);
-  int nFound = tsp->SearchHighRes(c,destC,vdc.size(),4, 2, kTRUE, 10,kTRUE,3);
-  
-  auto pm = new TPolyMarker(nFound, tsp->GetPositionX(), &vi[0]);
-  pm->SetMarkerStyle(23);
-  pm->SetMarkerColor(kRed);
-  pm->SetMarkerSize(1.3);
-
-  auto c1 = new TCanvas("c1", "Searching of peaks");
-  c1->cd();
-  
-  auto grOrig    = new TGraph(vdc.size(), e,c);
-  grOrig->SetTitle("Searching of peaks");
-  grOrig->SetLineWidth(0);
-  grOrig->SetMarkerStyle(8);
-  grOrig->SetMarkerSize(0.4);
-  grOrig->GetListOfFunctions()->Add(pm);
-  grOrig->Draw();
   
 }

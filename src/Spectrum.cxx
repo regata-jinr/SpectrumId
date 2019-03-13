@@ -17,7 +17,7 @@
 #include "TError.h"
 #include "MetaData.h"
 
-//TODO: add destructor; USE ONLY SMART POINTERS
+//TODO: add destructors; USE ONLY SMART POINTERS
 //TODO: metaData.empty() is not defined;
 //TODO: Should we let to users specify delimiter?
 //NOTE: LoadCnf could be skip, because now we can focus on algorithms.
