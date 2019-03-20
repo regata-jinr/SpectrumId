@@ -1,2 +1,3 @@
 # SpectrumId
-Identification of elements from spectrum for neutron activation analysis
+### Nuclids identification software for high resolution gamma-ray spectra
+Development in process...See projects for news.

@@ -1,6 +1,6 @@
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
- /* Copyright(c) 2018, REGATA Experiment at JINR, All rights reserved. *
+ /* Copyright(c) 2018-2019, REGATA Experiment at JINR, All rights reserved. *
   * See cxx source for full Copyright notice                           */
  
  

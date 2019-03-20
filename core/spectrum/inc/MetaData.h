@@ -1,7 +1,7 @@
 #ifndef METADATA_H
 #define METADATA_H
 
- /* Copyright(c) 2018, REGATA Experiment at JINR, All rights reserved. *
+ /* Copyright(c) 2018-2019, REGATA Experiment at JINR, All rights reserved. *
   * See cxx source for full Copyright notice                           */
  
  
@@ -40,7 +40,7 @@ struct MetaData {
     bool empty() {
       return isInit;
     };
-  
+  ~MetaData(){};
 };
  
 #endif
