@@ -51,20 +51,20 @@ void SpectrumId::Spectrum::LoadCnf(const std::string FileName, bool readMetaData
 * @param FileName p_FileName:...
 * @param readMetaData p_readMetaData:...
 */
-void SpectrumId::Spectrum::LoadAscii(const std::string FileName, bool readMetaData) {
-  std::ifstream iFile(FileName.c_str());
-  std::string line="#";
-//   if (!iFile.is_open()) {::Error("Spectrum::LoadAscii", "File can't be open!"); return;}
-  
-  if (readMetaData)
-    while(std::getline(iFile, line) && line[0] == '#') Spectrum::ParseMetaDataAscii(line);
-  iFile.tellg();
-  // TODO: check delimiter!
-  // if (line.find(defDelimiter) == std::string::npos) {::Error("Spectrum::LoadAscii","Default delimiter %c not found in first non header line.", defDelimiter);return;}
-  Spectrum::ParseValue(line);
-  while(std::getline(iFile, line)) Spectrum::ParseValue(line);
-  iFile.close();
-}
+// void SpectrumId::Spectrum::LoadAscii(const std::string FileName, bool readMetaData) {
+//   std::ifstream iFile(FileName.c_str());
+//   std::string line="#";
+// //   if (!iFile.is_open()) {::Error("Spectrum::LoadAscii", "File can't be open!"); return;}
+//   
+//   if (readMetaData)
+//     while(std::getline(iFile, line) && line[0] == '#') Spectrum::ParseMetaDataAscii(line);
+//   iFile.tellg();
+//   // TODO: check delimiter!
+//   // if (line.find(defDelimiter) == std::string::npos) {::Error("Spectrum::LoadAscii","Default delimiter %c not found in first non header line.", defDelimiter);return;}
+//   Spectrum::ParseValue(line);
+//   while(std::getline(iFile, line)) Spectrum::ParseValue(line);
+//   iFile.close();
+// }
 
 /**
 * @brief ...

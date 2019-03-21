@@ -50,8 +50,8 @@ class Window {
     
     bool IsCurrentValueEmission(std::string curve="pol2", double eps=0.15);
     double GetFitPointValue() {return sCurrentFitPoint;};
-    std::vector<double> GetWindowArray() {return sWindowArrayVal;};
-    std::vector<double> GetWindowArrayExceptCurrentPoint() {return sWindowArrayValExceptCurrentPoint;};
+   // std::vector<double> GetWindowArray() {return sWindowArrayVal;};
+   // std::vector<double> GetWindowArrayExceptCurrentPoint() {return sWindowArrayValExceptCurrentPoint;};
   };
 }
 

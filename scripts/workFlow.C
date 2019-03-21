@@ -1,18 +1,17 @@
 #include "TError.h"
 #include "TH1.h"
-// #include "TF1.h"
+#include "TF1.h"
 // #include "TGraph.h"
+#include "TFile.h"
 #include <vector>
 #include <iostream>
-// #include "TROOT.h"
-// #include "TPad.h"
+#include "TROOT.h"
+#include "TPad.h"
+#include "TStyle.h"
 #include "TRandom3.h"
 #include "TSpectrum.h"
 // #include "TMath.h"
 #include "Window.h"
-#include "Fit/BinData.h"
-#include "Fit/Fitter.h"
-#include "Math/WrappedMultiTF1.h"
 
 void AddNoiseAndEmissions(TH1D* h, int a);
 void workFlow(int n);
@@ -45,10 +44,11 @@ TH1D* GenHist() {
 
 
 /*
- gSystem->AddIncludePath("-I/home/bdrum/GoogleDrive/Job/flnp/srec/SpectrumId/inc")
- .L ../src/Window.cxx+
+ gSystem->AddIncludePath("-I/home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/inc")
+ .L /home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/src/Window.cxx+
  .L workFlow.C+
  workFlow();
+ Smoothing();
  
 */
 
@@ -72,8 +72,8 @@ void workFlow(int n = 150) {
   hn->Smooth();
   hn->DrawClone("e1same");
   
-  std::vector<double> v = {0,1,4,9,16,25,36,490,64,91};
-  std::vector<double> tv = {0,1,4,9,16,25,36,490,64,91};
+  std::vector<double> v = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
+  std::vector<double> tv = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
   
 
   SmoothArray(tv);
@@ -103,20 +103,56 @@ void workFlow(int n = 150) {
   
 }
 
+//TODO: add more special cases 
 
-void testFit() {
-  std::vector<double> x {5, 6, 8, 9};
-  std::vector<double> xE(4,0);
-  std::vector<double> y {25, 36, 64, 91 };
-  std::vector<double> yE {5, 6, 8, 9};//{1./25, 1./36, 1./64, 1./91 };
-  ROOT::Fit::BinData bData(x.size(), x.data(), y.data(), xE.data(), yE.data());
-  auto f1 = new TF1("pol2", "pol2");
-  ROOT::Math::WrappedMultiTF1 ff(*f1,f1->GetNdim());
-  ROOT::Fit::Fitter fitter;
-  fitter.Config().SetMinimizer("Linear");
-  fitter.SetFunction(ff);
-  fitter.LeastSquareFit(bData);
-  auto r = fitter.Result();
-  r.Print(std::cout);
+void Smoothing() {
+   Int_t i;
+   const Int_t nbins = 1024;
 
+   Double_t sourceOrig[nbins];
+   Double_t sourceTH1[nbins];
+   Double_t sourceMarkov[nbins];
+   std::vector<Double_t> sourceZlkzv(sourceOrig,sourceOrig + nbins);
+   
+   gROOT->ForceStyle();
+
+   TString dir  = gROOT->GetTutorialDir();
+   TString file = dir+"/spectrum/TSpectrum.root";
+   TFile *f     = new TFile(file.Data());
+   TH1F *h = (TH1F*) f->Get("back1");
+   h->SetTitle("Original spectrum");
+
+   for (i = 0; i < nbins; i++) sourceOrig[i]=h->GetBinContent(i + 1);
+   for (i = 0; i < nbins; i++) sourceTH1[i]=h->GetBinContent(i + 1);
+   for (i = 0; i < nbins; i++) sourceMarkov[i]=h->GetBinContent(i + 1);
+   for (i = 0; i < nbins; i++) sourceZlkzv[i]=h->GetBinContent(i + 1);
+   
+   h->SetAxisRange(1,1024);
+   h->Draw("L");
+
+   TSpectrum *s = new TSpectrum();
+
+   TH1F *smoothMarkov = new TH1F("smoothMarkov","smoothMarkov",nbins,0.,nbins);
+   smoothMarkov->SetLineColor(kRed);
+
+   s->SmoothMarkov(sourceMarkov,1024,3);
+   for (i = 0; i < nbins; i++) smoothMarkov->SetBinContent(i + 1,sourceMarkov[i]);
+   smoothMarkov->Draw("L SAME");
+   
+   TH1F *smoothTH1 = new TH1F("smoothTH1","smoothTH1",nbins,0.,nbins);
+   smoothTH1->SetLineColor(kBlack);
+   TH1::SmoothArray(1024,sourceTH1);
+   for (i = 0; i < nbins; i++) smoothTH1->SetBinContent(i + 1,sourceTH1[i]);
+   smoothTH1->Draw("L SAME");
+   
+  
+   
+   TH1F *smoothZlkzv = new TH1F("smoothZlkzv","smoothZlkzv",nbins,0.,nbins);
+   smoothZlkzv->SetLineColor(kGreen);
+   SmoothArray(sourceZlkzv);
+   for (i = 0; i < nbins; i++) smoothZlkzv->SetBinContent(i + 1,sourceZlkzv[i]);
+   smoothZlkzv->Draw("L SAME");
+
+   gStyle->SetOptStat(0);
+   gPad->BuildLegend();
 }

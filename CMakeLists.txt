@@ -1,7 +1,7 @@
 # **************************************************************************
 # *                                                                        *
 # *                                                                        *
-# * Copyright(c) 2018-19, REGATA Experiment at JINR, All rights reserved.     *
+# * Copyright(c) 2018-19, REGATA Experiment at JINR, All rights reserved.  *
 # *                                                                        *
 # *                                                                        *
 # **************************************************************************
@@ -12,39 +12,39 @@
 
 cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
-project(spectrumId CXX)	
+project(spectrumID CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
+include(CheckCXXCompilerFlag)
+
+OPTION (BUILD_SHARED_LIBS "Build shared libraries." ON)
+message(_CMAKE_SOURCE_DIR_)
+message(${CMAKE_SOURCE_DIR})
+include_directories( ${CMAKE_SOURCE_DIR}/core/spectrum/inc )
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-#TODO: clearify is it need to have so many flags?
-#TODO: e.g. -On? for optimisations 
-set(CFLAGS " -g -ansi -pedantic -Wall -Wextra -Wno-sign-compare -Wsign-promo -Wabi -std=c++17 ")
+#TODO: e.g. -On? for optimisations
+set(CFLAGS " -pthread -g -ansi -pedantic -Wall -Wextra -Wno-sign-compare -Wsign-promo -Wabi -std=c++17 ")
+set(CMAKE_CXX_FLAGS ${CFLAGS})
 
-#TODO: seems in cmake I should not specify such variables, but I can use find_package()
-set(ROOT_CFLAGS " -pthread -m64 -I/usr/local/include") #root-config --cflags"
-set(ROOT_LIBS " -L/usr/local/lib -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -lROOTDataFrame -pthread -lm -ldl -rdynamic ") #"root-config --libs"
-#TODO: seems in cmake I should not specify such variables, but I can use find_package()
-set(GSL_CFLAGS " -I/usr/include ") # gsl-config --cflags
-set(GSL_LIBS " -L/usr/lib/x86_64-linux-gnu -lgsl -lgslcblas -lm ") # gsl-config --libs
+find_package(ROOT REQUIRED)
+include(${ROOT_USE_FILE})
+include_directories(${ROOT_INCLUDE_DIRS})
+link_directories(${ROOT_LIBRARIES})
 
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
-add_subdirectory(core) 
-add_subdirectory(main) 
-#add_subdirectory(test) 
+#find_package(GSL REQUIRED)
+#include_directories(${GSL_INCLUDE_DIR})
+#link_directories(${GSL_LIBRARY_DIR})
+enable_testing()
 
-set(ROOT_VERSION_MIN_6 "6.15.01")
-
-
-#set(SOURCE_EXE spectrumId.cpp)
-
-SET(CMAKE_CXX_FLAGS "${CFLAGS} ${ROOT_CFLAGS} ${GSL_CFLAGS} ")
-
-#find_package(GTest REQUIRED)
+add_subdirectory(core)
+add_subdirectory(main)
+add_subdirectory(test)
 
 
-#add_executable(spectrumId ${SOURCE_EXE})
-target_link_libraries(lSpectrum lBackGround lPeak lWindow)
 

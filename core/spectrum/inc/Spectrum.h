@@ -50,11 +50,11 @@
       //todo add enumeration or use root kWarning, kInfo, etc.
       int printLevel;
       void LoadCnf(const std::string FileName, bool readMetaData);
-      void LoadAscii(const std::string FileName, bool readMetaData);
+//       void LoadAscii(const std::string FileName, bool readMetaData);
       void Load(const std::string FileName, bool readMetaData);
       // Spectrum* Load(const std::string FileName); - from DB
       void ParseMetaDataCnf(const std::string); // NOTE here perhaps the argument should be not a string, but something like byte string
-      void ParseMetaDataAscii(const std::string);
+//       void ParseMetaDataAscii(const std::string);
       void ParseValue(const std::string);
     public:
       Spectrum(const char* FileName, bool readMetaData=true);
