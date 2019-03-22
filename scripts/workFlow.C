@@ -48,7 +48,7 @@ TH1D* GenHist() {
  .L /home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/src/Window.cxx+
  .L workFlow.C+
  workFlow();
- Smoothing();
+ //Smoothing();
  
 */
 

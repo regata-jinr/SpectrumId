@@ -33,7 +33,6 @@ class Window {
     std::vector<double> sWindowArrayValErr;
     std::vector<double> sWindowArrayValErrExceptCurrentPoint;
     
-    
     double sCurrentPointVal;
     double sCurrentPointX;
     double sCurrentPointErrX;
@@ -42,6 +41,9 @@ class Window {
     int sCurrentIndex;
     int sWindowSize;
     int sCurrentIndexInWindow;
+    
+    void FormArrays(std::vector<double>& origArray, std::vector<double>& newArray, std::vector<double>& modifiedArray);
+    
   public:
     Window (const std::vector<double>& val, int currentIndex, int windowSize=5);
     Window (const std::vector<double>& x, const std::vector<double>& val, int currentIndex, int windowSize = 5 );
@@ -49,9 +51,9 @@ class Window {
     ~Window(){};
     
     bool IsCurrentValueEmission(std::string curve="pol2", double eps=0.15);
+    bool IsMoreThanCNeighbors(double c);
     double GetFitPointValue() {return sCurrentFitPoint;};
-   // std::vector<double> GetWindowArray() {return sWindowArrayVal;};
-   // std::vector<double> GetWindowArrayExceptCurrentPoint() {return sWindowArrayValExceptCurrentPoint;};
+    
   };
 }
 
