@@ -14,7 +14,7 @@ gSystem->AddIncludePath("-Iinc/");
 #include "TLegend.h"
 #include "TSystem.h"
 #include "TMath.h"
-#include "Spectrum.h"
+#include "../core/spectrum/inc/Spectrum.h"
 #include <vector>
 #include <valarray>
 #include <iostream>
@@ -56,6 +56,11 @@ Double_t* SMNP(Double_t* arr, Int_t size) {
   auto sArr = new double[size];
   for (auto i=0;i<size;++i) sArr[i]=TMath::Log(TMath::Log(TMath::Sqrt(arr[i]+1)+1)+1);
   return sArr;
+}
+
+
+void Background() {
+  
 }
 
 void BackgroundEstimation() {

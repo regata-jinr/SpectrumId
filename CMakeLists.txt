@@ -26,7 +26,7 @@ message(${CMAKE_SOURCE_DIR})
 include_directories( ${CMAKE_SOURCE_DIR}/core/spectrum/inc )
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #TODO: e.g. -On? for optimisations
-set(CFLAGS " -pthread -g -ansi -pedantic -Wall -Wextra -Wno-sign-compare -Wsign-promo -Wabi -std=c++17 ")
+set(CFLAGS " -pthread -g -ansi -pedantic -Wall -Wextra -Wno-sign-compare -Wsign-promo -Wabi -std=c++17 -Wno-pragma-once-outside-header")
 set(CMAKE_CXX_FLAGS ${CFLAGS})
 
 find_package(ROOT REQUIRED)
@@ -45,6 +45,3 @@ enable_testing()
 add_subdirectory(core)
 add_subdirectory(main)
 add_subdirectory(test)
-
-
-
