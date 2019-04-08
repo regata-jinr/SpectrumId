@@ -1,5 +1,4 @@
-#ifndef SPECTRUM_H
-#define SPECTRUM_H
+#pragma once
 
  /* Copyright(c) 2018-2019, REGATA Experiment at JINR, All rights reserved. *
   * See cxx source for full Copyright notice                           */
@@ -74,4 +73,3 @@
       ~Spectrum(){};
     };
 }
-#endif
