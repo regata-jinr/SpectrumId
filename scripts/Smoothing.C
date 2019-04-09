@@ -141,6 +141,11 @@ void SimpleHistSmoothing() {
   auto smoothMarkovHist = new TH1D(*hOrig);
   auto smoothTH1Hist = new TH1D(*hOrig);
   auto smoothZlkzvHist = new TH1D(*hOrig);
+  hOrig->SetTitle("Orig");
+  smoothMarkovHist->SetTitle("Markov");
+  smoothZlkzvHist->SetTitle("Zlkzv");
+  smoothTH1Hist->SetTitle("TH1");
+
   hOrig->SetLineColor(kBlue);
   smoothMarkovHist->SetLineColor(kRed);
   smoothTH1Hist->SetLineColor(kBlack);
@@ -149,11 +154,11 @@ void SimpleHistSmoothing() {
 
   TSpectrum *s = new TSpectrum();
   s->SmoothMarkov(smoothMarkovHist->GetArray(),smoothMarkovHist->GetNbinsX(),3);
- // smoothMarkovHist->DrawClone("L SAME");
- // smoothTH1Hist->Smooth();
+  smoothMarkovHist->DrawClone("L SAME");
+  smoothTH1Hist->Smooth();
   smoothTH1Hist->DrawClone("L SAME");
    
-  std::vector<Double_t> source(smoothZlkzvHist->GetArray()[0], smoothMarkovHist->GetNbinsX());
+  std::vector<Double_t> source(&smoothZlkzvHist->GetArray()[0], &smoothZlkzvHist->GetArray()[0] + smoothZlkzvHist->GetNbinsX());
   std::vector<Double_t> w(source.size(), 1);
   SmoothArray(source);
   smoothZlkzvHist->Clear();
@@ -161,4 +166,5 @@ void SimpleHistSmoothing() {
   smoothZlkzvHist->DrawClone("L SAME");
   gStyle->SetOptStat(0);
   gPad->BuildLegend();
+
 }

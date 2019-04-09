@@ -28,7 +28,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #TODO: e.g. -On? for optimisations
 set(CFLAGS " -pthread -g -ansi -pedantic -Wall -Wextra -Wno-sign-compare -Wsign-promo -Wabi -std=c++17 -Wno-pragma-once-outside-header")
 set(CMAKE_CXX_FLAGS ${CFLAGS})
-
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 find_package(ROOT REQUIRED)
 include(${ROOT_USE_FILE})
 include_directories(${ROOT_INCLUDE_DIRS})
