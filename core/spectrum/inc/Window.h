@@ -15,43 +15,20 @@
 namespace SpectrumId {
 class Window {
   private:
-    std::vector<double> sxData;
-    std::vector<double> sxErr;
-    std::vector<double> svData;
-    std::vector<double> svErr;
+    std::vector<double> wWindowArray;
     
-    std::vector<double> sWindowArrayX;
-    std::vector<double> sWindowArrayXExceptCurrentPoint;
-    
-    std::vector<double> sWindowArrayXErr;
-    std::vector<double> sWindowArrayXErrExceptCurrentPoint;
-    
-    std::vector<double> sWindowArrayVal;
-    std::vector<double> sWindowArrayValExceptCurrentPoint;
-    
-    std::vector<double> sWindowArrayValErr;
-    std::vector<double> sWindowArrayValErrExceptCurrentPoint;
-    
-    double sCurrentPointVal;
-    double sCurrentPointX;
-    double sCurrentPointErrX;
-    double sCurrentFitPoint;
-    double sCurrentPointErrVal;
-    int sCurrentIndex;
-    int sWindowSize;
-    int sCurrentIndexInWindow;
-    
-    void FormArrays(std::vector<double>& origArray, std::vector<double>& newArray, std::vector<double>& modifiedArray);
+    int wCurrentIndex;
+    int wWindowSize;
+    int wCurrentWindowIndex;
+    int wInputArraySize;
+    int wStartIndex;
+    int wEndIndex;
+    void FormIndexes();
     
   public:
-    Window (const std::vector<double>& val, int currentIndex, int windowSize=5);
-    Window (const std::vector<double>& x, const std::vector<double>& val, int currentIndex, int windowSize = 5 );
-    Window (const std::vector<double>& x, const std::vector<double>& val, const std::vector<double>& xErr, const std::vector<double>& valErr, int currentIndex, int windowSize=5);
-    ~Window(){};
-    
-    bool IsCurrentValueEmission(std::string curve="pol2", double eps=0.15);
-    bool IsMoreThanCNeighbors(double c);
-    double GetFitPointValue() {return sCurrentFitPoint;};
+    Window (const std::vector<double>& val, int currentIndex, int windowSize = 5);
+    int GetStartIndex() {return wStartIndex;} 
+    int GetEndIndex() {return wEndIndex;} 
     
   };
 }
