@@ -15,7 +15,7 @@
 namespace SpectrumId {
 class Window {
   private:
-    std::vector<double> wWindowArray;
+//    std::vector<double> wWindowArray;
     
     int wCurrentIndex;
     int wWindowSize;

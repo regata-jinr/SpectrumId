@@ -6,7 +6,7 @@
 namespace Utilities {
   template <typename T> 
   std::string Vec2String(const std::vector<T>& v);
-  bool IsCurrentValueEmission(Window w, std::string curve, double eps); 
+ // bool IsCurrentValueEmission(Window w, std::string curve, double eps); 
 
   template <typename T> 
   std::string Vec2String(const std::vector<T>& v) {
@@ -26,6 +26,7 @@ namespace Utilities {
 * @param eps - value for comparison with chi2 of current point and fitVal of current point
 * @return true if chi2 of current point and fit point more than eps and window could be fit of curve, current point is emission
 */
+  /*
   bool IsCurrentValueEmission(Window w, std::string curve = "pol2", double eps = 0.15) {
       
     ROOT::Fit::BinData bData(sWindowArrayXExceptCurrentPoint.size(), sWindowArrayXExceptCurrentPoint.data(),\
@@ -46,12 +47,14 @@ namespace Utilities {
     if ((1.0/sCurrentPointVal) * (sCurrentPointVal - sCurrentFitPoint) * (sCurrentPointVal - sCurrentFitPoint) >= eps && isFitted) return true;
     return false;
   }
+  */
 /**
 * @brief Compares current value with neighbors...
 *        If current point more than c*(value[i-1] + value[i+1])/ 2 likely it's emission.
 * @param c - scale factor
 * @return true if current point more than c*(value[i-1] + value[i+1])/ 2
 */
+  /*
   bool IsMoreThanCNeighbors(double c) {
     double leftValue{}, rightValue{};
     if (sCurrentIndexInWindow > 0)
@@ -64,6 +67,6 @@ namespace Utilities {
 
     return (sCurrentPointVal > ((c / 2) * (rightValue + leftValue)));
   }
-
+*/
 }
 

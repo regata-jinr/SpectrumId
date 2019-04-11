@@ -19,23 +19,24 @@
 
 
 void SpectrumId::Window::FormIndexes() {
-    int wStartIndex = wCurrentIndex - wCurrentWindowIndex;
-    int endIndex = wCurrentIndex + wCurrentWindowIndex + 1;
-    
+    wStartIndex = wCurrentIndex - wCurrentWindowIndex;
+    wEndIndex = wCurrentIndex + wCurrentWindowIndex;
+   
+
     //boundary points
-    if (wStartIndex < 0) {
-      wStartIndex += wCurrentWindowIndex;
-      endIndex = wWindowSize;
-      wCurrentWindowIndex = wStartIndex;
+    if (wStartIndex <= 0) {
+      wStartIndex = 0; // wCurrentWindowIndex;
+      wEndIndex = wWindowSize - 1;
+      wCurrentWindowIndex += wStartIndex;
     }
 
-    if (endIndex >= wInputArraySize) {
+    if (wEndIndex >= wInputArraySize) {
       wStartIndex = wInputArraySize - wWindowSize;
-      endIndex = wInputArraySize;
+      wEndIndex = wInputArraySize - 1;
       wCurrentWindowIndex = wWindowSize - (wInputArraySize - wCurrentIndex - 1) - 1;
     }
     //boundary points  
-    ::Info("Window::FormArrays", "wStartIndex - %d, endIndex - %d", wStartIndex, endIndex); 
+    ::Info("Window::FormArrays", "wStartIndex - %d, endIndex - %d", wStartIndex, wEndIndex); 
 }
 
 
@@ -52,13 +53,14 @@ SpectrumId::Window::Window(const std::vector<double>& arr, int currentIndex, int
                                                                                                wInputArraySize(arr.size())
 {
     if (arr.empty()) throw std::invalid_argument("Input data for Window is empty");
-    
+    if (wCurrentIndex >= wInputArraySize) ::Error("SpectrumId::Window::FormIndexes", "currentIndex more than size of input array");
+
     if (wWindowSize < 3) {
       ::Warning("Window::Window", "Size of window too small. 3 will be set.");
       wWindowSize = 3;
     }
     
     FormIndexes();
-    wWindowArray = std::vector<double>(arr.begin() + wStartIndex, arr.begin() + wEndIndex);
+//    wWindowArray = std::vector<double>(arr.begin() + wStartIndex, arr.begin() + wEndIndex);
     }
 
