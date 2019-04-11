@@ -1,6 +1,7 @@
 set(test_SRC 
       Test.cxx
-      WindowTest.cxx )
+      WindowTest.cxx 
+      UtilitiesTest.cxx )
 
 add_executable(RunGoogleTests ${test_SRC})
 target_link_libraries(RunGoogleTests ${GTEST_BOTH_LIBRARIES} lSpectrum ${ROOT_LIBRARIES})

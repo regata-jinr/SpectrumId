@@ -10,11 +10,6 @@
 #include <stdexcept>
 #include <numeric>
 #include "TError.h"
-#include "TF1.h"
-#include "Fit/BinData.h"
-#include "Fit/Fitter.h"
-#include "Math/WrappedMultiTF1.h"
-#include "TMath.h"
 #include "Utilities.h"
 
 
