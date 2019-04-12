@@ -16,6 +16,7 @@
 #include "TSpectrum.h"
 #include "MetaData.h"
 #include "Window.h"
+#include "Utilities.h"
 
 
 //TODO: add destructors; USE ONLY SMART POINTERS

@@ -1,5 +1,4 @@
 #include "Window.h"
-#include "Utilities.h"
 #include "gtest/gtest.h"
 
 TEST(WindowTest, Indexes) { 
