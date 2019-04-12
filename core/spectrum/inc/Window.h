@@ -29,6 +29,7 @@ class Window {
     Window (const std::vector<double>& val, int currentIndex, int windowSize = 5);
     int GetStartIndex() {return wStartIndex;} 
     int GetEndIndex() {return wEndIndex;} 
+    int GetIndexInWindow() {return wCurrentWindowIndex;} 
     
   };
 }

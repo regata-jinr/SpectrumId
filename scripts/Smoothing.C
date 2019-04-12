@@ -13,12 +13,14 @@
 #include "TSpectrum.h"
 #include "TSystem.h"
 #include "DataGen.C"
-#include "../core/spectrum/inc/Window.h"
+#include "Utilities.h"
+#include "Window.h"
 
 
 /*
  gSystem->AddIncludePath("-I/home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/inc")
  .L /home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/src/Window.cxx+
+ .L /home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/src/Utilities.cxx+
  .L Smoothing.C+
  Smoothing();
  
@@ -29,11 +31,17 @@ void Smoothing();
 void SimpleArraysSmoothing();
 void SimpleHistSmoothing();
 
+// TODO: Create interface for smoothing functionality
+// TODO: size of window array - 4 instead 5.
+// OUTPUT:
+// Info in <Window::FormArrays>: wStartIndex - 25, endIndex - 29
+// FIXME: Error in <Utilities::IsEmission>: Current index more than size of input vectors.
 void SmoothArray(std::vector<double>& arr) {
   auto w = new SpectrumId::Window(arr,0);
   for (auto & aI : arr) {
     w = new SpectrumId::Window(arr, &aI - &arr[0]);
-    if (!w->IsCurrentValueEmission("pol2", 1.0)) aI = w->GetFitPointValue();
+    std::vector<double> tv(arr.begin() + w->GetStartIndex(), arr.begin() + w->GetEndIndex());
+    if (Utilities::Fitter::IsEmission(tv, w->GetIndexInWindow())) aI = Utilities::Fitter::currentFitPoint;
   }
 }
 
@@ -141,6 +149,12 @@ void SimpleHistSmoothing() {
   auto smoothMarkovHist = new TH1D(*hOrig);
   auto smoothTH1Hist = new TH1D(*hOrig);
   auto smoothZlkzvHist = new TH1D(*hOrig);
+
+
+  hOrig->SetName("Orig");
+  smoothMarkovHist->SetName("Markov");
+  smoothZlkzvHist->SetName("Zlkzv");
+  smoothTH1Hist->SetName("TH1");
   hOrig->SetTitle("Orig");
   smoothMarkovHist->SetTitle("Markov");
   smoothZlkzvHist->SetTitle("Zlkzv");
@@ -165,6 +179,7 @@ void SimpleHistSmoothing() {
   smoothZlkzvHist->FillN(source.size(), source.data(), w.data());
   smoothZlkzvHist->DrawClone("L SAME");
   gStyle->SetOptStat(0);
+
   gPad->BuildLegend();
 
 }
