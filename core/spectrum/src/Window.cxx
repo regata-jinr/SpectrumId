@@ -20,9 +20,9 @@ void SpectrumId::Window::FormIndexes() {
 
     //boundary points
     if (wStartIndex <= 0) {
-      wStartIndex = 0; // wCurrentWindowIndex;
-      wEndIndex = wWindowSize - 1;
       wCurrentWindowIndex += wStartIndex;
+      wStartIndex = 0;
+      wEndIndex = wWindowSize - 1;
     }
 
     if (wEndIndex >= wInputArraySize) {
@@ -56,6 +56,6 @@ SpectrumId::Window::Window(const std::vector<double>& arr, int currentIndex, int
     }
     
     FormIndexes();
-//    wWindowArray = std::vector<double>(arr.begin() + wStartIndex, arr.begin() + wEndIndex);
+    wWindowArray = std::vector<double>(arr.begin() + wStartIndex, arr.begin() + wEndIndex + 1);
     }
 

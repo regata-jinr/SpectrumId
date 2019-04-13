@@ -23,6 +23,7 @@
  .L /home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/src/Utilities.cxx+
  .L Smoothing.C+
  Smoothing();
+ // SimpleArraysSmoothing();
  
 */
 void SmoothArray(std::vector<double>& arr);
@@ -32,50 +33,37 @@ void SimpleArraysSmoothing();
 void SimpleHistSmoothing();
 
 // TODO: Create interface for smoothing functionality
-// TODO: size of window array - 4 instead 5.
-// OUTPUT:
-// Info in <Window::FormArrays>: wStartIndex - 25, endIndex - 29
-// FIXME: Error in <Utilities::IsEmission>: Current index more than size of input vectors.
 void SmoothArray(std::vector<double>& arr) {
-  auto w = new SpectrumId::Window(arr,0);
+  auto w = SpectrumId::Window(arr,0);
   for (auto & aI : arr) {
-    w = new SpectrumId::Window(arr, &aI - &arr[0]);
-    std::vector<double> tv(arr.begin() + w->GetStartIndex(), arr.begin() + w->GetEndIndex());
-    if (Utilities::Fitter::IsEmission(tv, w->GetIndexInWindow())) aI = Utilities::Fitter::currentFitPoint;
+    w = SpectrumId::Window(arr, &aI - &arr[0]);
+    ::Info("SmoothArray", "Current index in window: %d", w.GetIndexInWindow());
+    ::Info("SmoothArray", "Window array: %s", Utilities::Vec2String(w.GetWindowArray()).c_str());
+    if (Utilities::Fitter::IsEmission(w.GetWindowArray(), w.GetIndexInWindow())) aI = Utilities::Fitter::currentFitPoint;
   }
 }
 
 void SimpleArraysSmoothing() {
   
-  std::vector<double> v = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
-  std::vector<double> tv = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
+  std::vector<double> vOrig = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
+  std::vector<double> vZlokazov = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
+  std::vector<double> vTH1 = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
+  std::vector<double> vMarkov = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
   
   std::cout << "Smoothing comparison of simple arrays" << std::endl << "based on 3 algorithms:" << std::endl;
 
-  SmoothArray(tv);
-  
-  std::cout << "Orig vector" << std::endl;
-  for(auto &vi : v) std::cout << vi << "; ";
-  std::cout << std::endl;
-  
-  std::cout << "My smooth" << std::endl;
-  for(auto &vi : tv) std::cout << vi << "; ";
-  std::cout << std::endl;
-  
-  tv = v ;
-  
-  TH1::SmoothArray(tv.size(), tv.data());
-  std::cout << "TH1::SmoothArray" << std::endl;
-  for(auto &vi : tv) std::cout << vi << "; ";
-  std::cout << std::endl;
-  
-  tv = v ;
-  
+  SmoothArray(vZlokazov);
+
+  TH1::SmoothArray(vTH1.size(), vTH1.data());
+
   auto ts = new TSpectrum();
-  ts->SmoothMarkov(tv.data(), tv.size(),3);
-  std::cout << "TSpectrum::SmoothMarkov" << std::endl;
-  for(auto &vi : tv) std::cout << vi << "; ";
-  std::cout << std::endl;
+  ts->SmoothMarkov(vMarkov.data(), vMarkov.size(),3);
+
+
+::Info("SimpleArraysSmoothing:", "Orig vector | Zlokazov | TH1::SmoothArray | TSpectrum::SmoothMarkov");
+for (auto i = 0; i < vOrig.size(); ++i) {
+::Info("                      ", "   %.3f   |   %.3f   |   %.3f   |   %.3f   ", vOrig[i], vZlokazov[i], vTH1[i], vMarkov[i]);
+}
   
 }
 
@@ -172,6 +160,8 @@ void SimpleHistSmoothing() {
   smoothTH1Hist->Smooth();
   smoothTH1Hist->DrawClone("L SAME");
    
+//TODO: check filling of smoothZlkzvHist
+
   std::vector<Double_t> source(&smoothZlkzvHist->GetArray()[0], &smoothZlkzvHist->GetArray()[0] + smoothZlkzvHist->GetNbinsX());
   std::vector<Double_t> w(source.size(), 1);
   SmoothArray(source);
