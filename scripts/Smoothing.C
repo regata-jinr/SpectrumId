@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <iterator>
+#include <numeric>
 #include "TROOT.h"
 #include "TPad.h"
 #include "TStyle.h"
@@ -22,18 +23,19 @@
  .L /home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/src/Window.cxx+
  .L /home/bdrum/GoogleDrive/Job/flnp/srec/dev/spectrumId/core/spectrum/src/Utilities.cxx+
  .L Smoothing.C+
- Smoothing();
- // SimpleArraysSmoothing();
+ // Smoothing();
+  SimpleArraysSmoothing();
  
 */
 void SmoothArray(std::vector<double>& arr);
 void SmoothingReal();
 void Smoothing();
-void SimpleArraysSmoothing();
+void SimpleArraysSmoothing(int p);
 void SimpleHistSmoothing();
 
 // TODO: Create interface for smoothing functionality
 void SmoothArray(std::vector<double>& arr) {
+  Utilities::Fitter::curve = "pol2";
   auto w = SpectrumId::Window(arr,0);
   for (auto & aI : arr) {
     w = SpectrumId::Window(arr, &aI - &arr[0]);
@@ -43,12 +45,16 @@ void SmoothArray(std::vector<double>& arr) {
   }
 }
 
-void SimpleArraysSmoothing() {
-  
-  std::vector<double> vOrig = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
-  std::vector<double> vZlokazov = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
-  std::vector<double> vTH1 = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
-  std::vector<double> vMarkov = {0,1,4,9,16,25,36,490,64,91,100,121,144,169,196,225};
+void SimpleArraysSmoothing(int p = 2) {
+  std::vector<double> vOrig(12,0);
+  std::iota(vOrig.begin(), vOrig.end(), 0);
+  for (auto &v : vOrig)
+    v = gRandom->Gaus();
+    // v = TMath::Power(v,p);
+  vOrig[7] += 1000;
+  std::vector<double> vZlokazov = vOrig;
+  std::vector<double> vTH1 = vOrig;
+  std::vector<double> vMarkov = vOrig;
   
   std::cout << "Smoothing comparison of simple arrays" << std::endl << "based on 3 algorithms:" << std::endl;
 
@@ -59,11 +65,10 @@ void SimpleArraysSmoothing() {
   auto ts = new TSpectrum();
   ts->SmoothMarkov(vMarkov.data(), vMarkov.size(),3);
 
-
-::Info("SimpleArraysSmoothing:", "Orig vector | Zlokazov | TH1::SmoothArray | TSpectrum::SmoothMarkov");
-for (auto i = 0; i < vOrig.size(); ++i) {
-::Info("                      ", "   %.3f   |   %.3f   |   %.3f   |   %.3f   ", vOrig[i], vZlokazov[i], vTH1[i], vMarkov[i]);
-}
+  ::Info("", "|Orig vector | Zlokazov | TH1::SmoothArray | TSpectrum::SmoothMarkov|");
+  ::Info("", "|------------|----------|------------------|------------------------|");
+  for (auto i = 0; i < vOrig.size(); ++i)
+    ::Info("", "|  %.3f   |   %.3f   |   %.3f   |   %.3f   |", vOrig[i], vZlokazov[i], vTH1[i], vMarkov[i]);
   
 }
 
@@ -137,7 +142,7 @@ void SimpleHistSmoothing() {
   auto smoothMarkovHist = new TH1D(*hOrig);
   auto smoothTH1Hist = new TH1D(*hOrig);
   auto smoothZlkzvHist = new TH1D(*hOrig);
-
+  std::vector<double> vOrig(&hOrig->GetArray()[0], &hOrig->GetArray()[0] + hOrig->GetNbinsX());
 
   hOrig->SetName("Orig");
   smoothMarkovHist->SetName("Markov");
@@ -158,7 +163,9 @@ void SimpleHistSmoothing() {
   s->SmoothMarkov(smoothMarkovHist->GetArray(),smoothMarkovHist->GetNbinsX(),3);
   smoothMarkovHist->DrawClone("L SAME");
   smoothTH1Hist->Smooth();
+  std::vector<double> vTH1(&smoothTH1Hist->GetArray()[0], &smoothTH1Hist->GetArray()[0] + hOrig->GetNbinsX());
   smoothTH1Hist->DrawClone("L SAME");
+  std::vector<double> vMarkov(&smoothMarkovHist->GetArray()[0], &smoothMarkovHist->GetArray()[0] + hOrig->GetNbinsX());
    
 //TODO: check filling of smoothZlkzvHist
 
@@ -167,9 +174,21 @@ void SimpleHistSmoothing() {
   SmoothArray(source);
   smoothZlkzvHist->Clear();
   smoothZlkzvHist->FillN(source.size(), source.data(), w.data());
-  smoothZlkzvHist->DrawClone("L SAME");
+ // smoothZlkzvHist->DrawClone("L SAME");
+  std::vector<double> vZlokazov(&smoothZlkzvHist->GetArray()[0], &smoothZlkzvHist->GetArray()[0] + hOrig->GetNbinsX());
   gStyle->SetOptStat(0);
 
   gPad->BuildLegend();
 
+  ::Info("Pol2", "");
+  ::Info("", "|Orig vector | Zlokazov | TH1::SmoothArray | TSpectrum::SmoothMarkov|");
+  ::Info("", "|------------|----------|------------------|------------------------|");
+  for (auto i = 0; i < vOrig.size(); ++i)
+    ::Info("", "|  %.3f   |   %.3f   |   %.3f   |   %.3f   |", vOrig[i], vZlokazov[i], vTH1[i], vMarkov[i]);
+
+  // delete c2;
+  delete hOrig;
+  delete smoothMarkovHist;
+  delete smoothTH1Hist;
+  delete smoothZlkzvHist;
 }
