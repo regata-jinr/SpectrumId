@@ -13,7 +13,7 @@ We could try to test smoothing of simple arrays:
 **For x^2 array with pol2 curve:**
 
 |Orig vector|Zlokazov|TH1::SmoothArray|TSpectrum::SmoothMarkov|
-|---|---|---|---|---|
+| --- | --- | --- | --- |
 |0.000|-0.000|0.000|27.124|
 1.000   |   1.000   |   1.000   |   29.766
 4.000   |   4.000   |   4.000   |   33.987
@@ -28,8 +28,9 @@ We could try to test smoothing of simple arrays:
 121.000   |   121.000   |   121.000   |   113.156   
 
 **For x^2 array with pol4 curve:**
+
 |Orig vector|Zlokazov|TH1::SmoothArray|TSpectrum::SmoothMarkov|
-|---|---|---|---|---|
+| --- | --- | --- | --- |
 0.000   |   -0.287   |   0.000   |   27.124   
 1.000   |   1.000   |   1.000   |   29.766   
 4.000   |   4.000   |   4.000   |   33.987   
@@ -44,8 +45,9 @@ We could try to test smoothing of simple arrays:
 121.000   |   93.044   |   121.000   |   113.156   
 
 **For x^4 array with pol2 curve:**
+
 |Orig vector|Zlokazov|TH1::SmoothArray|TSpectrum::SmoothMarkov|
-|---|---|---|---|---|
+|---|---|---|---|
 0.000   |   0.000   |   0.000   |   140.124   
 1.000   |   61.000   |   0.000   |   146.897   
 16.000   |   16.000   |   14.500   |   164.159   
@@ -61,8 +63,9 @@ We could try to test smoothing of simple arrays:
 
 
 **For x^4 array with pol4 curve:**
+
 |Orig vector|Zlokazov|TH1::SmoothArray|TSpectrum::SmoothMarkov|
-|---|---|---|---|---|
+|---|---|---|---|
 0.000   |   -0.683   |   0.000   |   140.124   
 1.000   |   3.591   |   0.000   |   146.897   
 16.000   |   16.000   |   14.500   |   164.159   
@@ -77,8 +80,9 @@ We could try to test smoothing of simple arrays:
 14641.000   |   14641.000   |   14511.500   |   20200.123  
 
 **For N(0,1) array with pol2 curve:**
+
 |Orig vector|Zlokazov|TH1::SmoothArray|TSpectrum::SmoothMarkov|
-|---|---|---|---|---|
+|---|---|---|---|
 0.999   |   0.999   |   0.999   |   41.334   
 -0.435   |   -0.435   |   0.836   |   37.665   
 0.782   |   0.782   |   0.572   |   40.050   
@@ -93,13 +97,13 @@ We could try to test smoothing of simple arrays:
 -0.985   |   -0.985   |   -0.985   |   34.990 
 
 
-Let's generate Gaus distribution random value and add to it noise and emissions. Then we applied our smoothers to it:
+Let's generate Gaus distribution with random value and add noises and emissions. Then we applied our smoothers for it:
 ![](https://pp.userapi.com/c846321/v846321487/1eb31e/DKzXXLAxVJA.jpg)
 
 
 This picture let us to understand one of important detail:
 
->**Markov smoothing doesn't eliminate peak, it decrease amplitude of emission, but increase amplitude of peak and allow to avoid the lost of the data. In such case key feature of peak is FHFW.**
+>**Markov smoothing doesn't eliminate peak, it decreases amplitude of emission, but as well as increases amplitude of peak and allow to avoid the lost of the data. In such case key feature of peak is FHFW.**
 
 *Zlokazov smoothing in this case just repeat the data.*
 
